@@ -1,0 +1,113 @@
+{% if res.icao %}
+<table class="table table-borderless airport-info">
+    <thead>
+    <tr>
+        <th colspan="5">
+            Airport Info
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            City: <b>{{ res.city }}</b>
+        </td>
+        <td>
+            Country: <img src="https://www.countryflags.io/{{ res.country }}/flat/32.png">
+        </td>
+        <td>
+            IATA code: <b>{{ res.iata }}</b>
+        </td>
+        <td>
+            ICAO code: <b>{{ res.icao }}</b>
+        </td>
+        <td>
+            Elevation: <b>{{ res.elevation_ft }}</b>ft/<b>{{ res.elevation_m }}</b>m
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            Airport Name: <b>{{ res.name }}</b>
+        </td>
+        <td>
+            Latitude: <b>{{ res.latitude }}</b>
+        </td>
+        <td>
+            Longitude: <b>{{ res.longitude }}</b>
+        </td>
+        <td>
+            <form action="{% url 'metar_taf' %}">
+                <input type="hidden" name="apt" value="{{ res.icao }}">
+                <button class="btn btn-primary" type="submit">
+                    Get Metar/Taf
+                </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<table class="table rwys">
+    <thead>
+    <tr>
+        <th colspan="6">Runways Info</th>
+    </tr>
+    <tr>
+        <th>Ident</th>
+        <th>Heading</th>
+        <th>Length</th>
+        <th>Width</th>
+        <th>Surface</th>
+        <th>Lights</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in res.runways %}
+        <tr>
+            <td>
+                {{ i.ident1 }}
+            </td>
+            <td>
+                {{ i.bearing1 }}°
+            </td>
+            <td>
+                {{ i.length_ft }}ft
+            </td>
+            <td>
+                {{ i.width_ft }}ft
+            </td>
+            <td>
+                {{ i.surface }}
+            </td>
+            <td>
+                {{ i.lights }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ i.ident2 }}
+            </td>
+            <td>
+                {{ i.bearing2 }}°
+            </td>
+            <td>
+                {{ i.length_ft }}ft
+            </td>
+            <td>
+                {{ i.width_ft }}ft
+            </td>
+            <td>
+                {{ i.surface }}
+            </td>
+            <td>
+                {{ i.lights }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        Airport not Found!
+    </div>
+{% endif %}

@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <nav class="navbar navbar-light">
+        <div class="row container-fluid">
+            <div class="col col-md-auto">
+                <h5 style="display: inline">Find<b style="height: 20px;">E</b>Route</h5><span
+                    style="color: rgba(0,0,0,0.25); margin-left: 6px; font-size: 13px">by Nidzhat</span>
+            </div>
+            <div class="col col-md-auto" style="text-align: center">
+            <span>
+                <b class="from-to">
+                </b>
+            </span>
+            </div>
+            <div class="col col-md-auto">
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Other tools
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a href="{% url 'main' %}">
+                            <button class="dropdown-item" type="button">Route Finder</button>
+                        </a></li>
+                        <li><a href="{% url 'airport_data' %}">
+                            <button class="dropdown-item" type="button">Airports Data</button>
+                        </a></li>
+                        <li>
+                            <a href="{% url 'metar_taf' %}">
+                                <button class="dropdown-item" type="button">METAR/TAF</button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+    {% autoescape off %}
+        {{table}}
+    {% endautoescape %}
+    <style>
+        th,td{
+            text-align: center;
+        }
+    </style>
+{% endblock %}

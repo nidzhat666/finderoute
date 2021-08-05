@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="9b8632d6-20dd-42a6-b65b-1a38c16ff42b" name="finderoute">
+        <fileTransfer rootFolder="/root/finderoute/" accessType="SFTP" host="nzmaslo.ru" port="22" sshConfigId="ea1ad187-08fc-4593-ac01-2098925ac3b1" sshConfig="root@nzmaslo.ru:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

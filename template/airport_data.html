@@ -1,0 +1,187 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+    <div style="height: 60px">
+        <nav class="navbar navbar-light">
+            <div class="row container-fluid">
+                <div class="col col-md-auto">
+                </div>
+                <div class="col col-md-auto" style="text-align: center">
+            <span>
+                <b class="from-to">
+                </b>
+            </span>
+                </div>
+                <div class="col col-md-auto">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Other tools
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <li><a href="{% url 'main' %}">
+                                <button class="dropdown-item" type="button">Route Finder</button>
+                            </a></li>
+                            <li>
+                                <a href="{% url 'metar_taf' %}"><button class="dropdown-item" type="button">METAR/TAF</button></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'nats' %}"><button class="dropdown-item" type="button">North Atlantic Tracks</button></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container search-form">
+        <div style="text-align: center">
+            <div class="col col-md-auto">
+                <h5 style="display: inline; font-size: 92px">Find<b>E</b>Route</h5><span
+                    style="color: rgba(0,0,0,0.25); margin-left: 6px; font-size: 20px">Airports</span>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+          crossorigin="anonymous">
+    <form action="" class="search-form">
+        <input name="text" type="search" placeholder="Airport Search">
+        <i class="fa fa-search"></i>
+    </form>
+    <style>
+        form.search-form {
+            margin-top: 40px;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 1s;
+            width: 50px;
+            height: 50px;
+            background: white;
+            box-sizing: border-box;
+            border-radius: 25px;
+            border: 4px solid white;
+            padding: 5px;
+        }
+
+        .search-form input {
+            border: 1px solid black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;;
+            height: 42.5px;
+            line-height: 30px;
+            outline: 0;
+            display: none;
+            font-size: 1em;
+            border-radius: 20px;
+            padding: 0 20px;
+        }
+
+        .fa {
+            border: 1px solid black;
+            box-sizing: border-box;
+            padding: 10px;
+            width: 42.5px;
+            height: 42.5px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-radius: 50%;
+            color: #07051a;
+            text-align: center;
+            font-size: 1.2em;
+            transition: all 1s;
+        }
+
+        .ui-autocomplete {
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+            border: 1px solid #222;
+            border-radius: 20px;
+            position: absolute;
+            list-style-type: none;
+            width: auto;
+            text-align: center;
+            padding: 5px;
+            background-color: white;
+        }
+
+        div[role=status] {
+            display: none;
+        }
+
+        .ui-menu-item {
+            padding: 10px;
+        }
+        .ui-state-active{
+            background-color: rgba(0, 0, 0, 0.17);
+            border-radius: 20px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("input[type=search]").autocomplete({
+                source: '{% url "autocomplete" %}',
+                position: {
+                    my: "left+0 top+10",
+                },
+                delay:0,
+                autoFocus: true,
+                select: function (e, el) {
+                    let apt = el['item']['value']
+                    jQuery.ajax({
+                        url: '{% url "find_airport" %}',
+                        method:"GET",
+                        data: {apt: apt},
+                        beforeSend:function (){jQuery('.apt-info').html('<img style="height: 70px" src="{% static 'images/loading.gif'%}" alt="">')},
+                        success:function (data) {
+                            jQuery('.apt-info').html(data)
+                        }
+                    })
+                },
+                minLength: 3,
+            });
+        });
+        jQuery('form').hover(function () {
+            jQuery(this).css('width', '600px');
+            jQuery('input').css({
+                "display": 'block'
+            })
+            jQuery('.fa').css({
+                'background': '#07051a',
+                'color': 'white'
+            })
+        })
+        jQuery('form').submit(function () {
+            if (jQuery('input').val().match(/^[A-Za-z]{3,4}$/)){
+                jQuery.ajax({
+                    url: '{% url "find_airport" %}',
+                    method:"GET",
+                    data: {apt: jQuery('input').val()},
+                    beforeSend:function (){jQuery('.apt-info').html('<img style="height: 70px" src="{% static 'images/loading.gif'%}" alt="">')},
+                    success:function (data) {
+                        jQuery('.ui-autocomplete').hide();
+                        jQuery('.apt-info').html(data)
+                    }
+                })
+            }
+            return false;
+        });
+    </script>
+    <div class="container apt-info" style="text-align: center">
+    </div>
+    <style>
+        .airport-info td, th {
+            font-size: 20px;
+            text-align: center;
+        }
+        .rwys td,th {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
